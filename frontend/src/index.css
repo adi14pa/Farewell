@@ -1,0 +1,136 @@
+@import "tailwindcss";
+
+/* Dark mode is driven by data-theme on <html>, set before first paint in index.html */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+@theme inline {
+  --font-display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-line: var(--line);
+  --color-brand: var(--brand);
+  --color-brand-2: var(--brand-2);
+  --color-on-brand: var(--on-brand);
+  --color-ok: var(--ok);
+  --color-warn: var(--warn);
+}
+
+:root {
+  --bg: #f4efe4;
+  --surface: #fffcf4;
+  --surface-2: #ebe4d3;
+  --fg: #14202e;
+  --muted: #5b6876;
+  --line: rgb(20 32 46 / 0.14);
+  --brand: #d8391d;
+  --brand-2: #e9a53a;
+  --on-brand: #ffffff;
+  --ok: #1b7f68;
+  --warn: #b8470f;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --bg: #0a0f1a;
+  --surface: #111827;
+  --surface-2: #182236;
+  --fg: #eef1f6;
+  --muted: #93a0b4;
+  --line: rgb(238 241 246 / 0.12);
+  --brand: #ff6a45;
+  --brand-2: #ffc15a;
+  --on-brand: #1c0a05;
+  --ok: #3ddcb4;
+  --warn: #ff9b6b;
+  color-scheme: dark;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* Soft sunrise glow behind the page */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(900px 520px at 88% -8%, color-mix(in oklab, var(--brand) 16%, transparent), transparent 62%),
+    radial-gradient(760px 480px at -6% 2%, color-mix(in oklab, var(--brand-2) 14%, transparent), transparent 58%);
+}
+
+/* Paper grain */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.07;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+[data-theme="dark"] body::after { opacity: 0.05; mix-blend-mode: screen; }
+
+::selection { background: color-mix(in oklab, var(--brand) 35%, transparent); }
+
+/* Glow: a soft shadow in light mode, a real glow in dark mode */
+.glow-brand { box-shadow: 0 10px 28px color-mix(in oklab, var(--brand) 32%, transparent); }
+[data-theme="dark"] .glow-brand {
+  box-shadow:
+    0 0 0 1px color-mix(in oklab, var(--brand) 55%, transparent),
+    0 8px 40px color-mix(in oklab, var(--brand) 38%, transparent);
+}
+[data-theme="dark"] .glow-soft {
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--brand) 40%, transparent),
+              0 0 36px color-mix(in oklab, var(--brand) 18%, transparent);
+}
+
+/* Budget slider */
+.range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 8px;
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+  background: linear-gradient(to right, var(--brand) var(--fill, 50%), var(--line) var(--fill, 50%));
+}
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 4px solid var(--brand);
+  box-shadow: 0 2px 10px rgb(0 0 0 / 0.3);
+  transition: transform 0.15s ease;
+}
+.range::-webkit-slider-thumb:hover { transform: scale(1.12); }
+.range::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 4px solid var(--brand);
+}
+.range:focus-visible::-webkit-slider-thumb {
+  box-shadow: 0 0 0 5px color-mix(in oklab, var(--brand) 30%, transparent);
+}
+
+.scrollbar-none { scrollbar-width: none; }
+.scrollbar-none::-webkit-scrollbar { display: none; }
